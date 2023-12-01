@@ -1,5 +1,4 @@
-@main def hello: Unit =
-  println("Hello world!")
-  println(msg)
-
-def msg = "I was compiled by Scala 3 new. :)"
+import day01.Day01
+@main def run: Unit = {
+  println("Day01_01: " + Day01().solve());
+}
