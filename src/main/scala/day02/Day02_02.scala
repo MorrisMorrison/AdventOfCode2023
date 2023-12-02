@@ -2,7 +2,7 @@ package day02
 
 import utils.FileReader
 
-class Day02_01 {
+class Day02_02 {
   def solve(): String = {
     val cubesConfiguration: Map[String, Int] =
       Map("red" -> 12, "green" -> 13, "blue" -> 14)

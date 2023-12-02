@@ -44,7 +44,7 @@ class Day01_02 {
 
   def solve(): String = {
     val lines =
-      FileReader().readLinesAsList("src/main/scala/day01/input_02.txt")
+      FileReader().readLinesAsList("src/main/scala/day01/input.txt")
     lines
       .map(line => {
         val firstAndLastDigit = findFirstAndLastDigit(line)
