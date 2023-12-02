@@ -11,31 +11,25 @@ class Day02_01 {
     var result = 0
     for (i <- 0 until lines.length) do
       val input = lines(i);
-      val gameNumber = i + 1
-      val slice = input.slice(input.indexOf(":") + 2, input.length())
       var isGameValid = true
-      val draws = slice.split(";")
+      val draws = input
+        .slice(input.indexOf(":") + 2, input.length())
+        .split(";")
       for (draw <- draws) do
-        val steps = draw.split(",")
-        for (step <- steps) do
+        for (step <- draw.split(",")) do
           val input = parseInput(step)
-          println(input)
           if (input._2 > cubesConfiguration(input._1))
             isGameValid = false
 
       if (isGameValid)
-        println("Found valid game with number " + gameNumber)
-        result += gameNumber
+        result += i + 1
 
     result.toString()
   }
 
   def parseInput(input: String): (String, Int) = {
-    val trimmedInput = input.trim()
-    val parts = trimmedInput.split("\\s+")
-    val color = parts(1)
-    val number = parts(0).toInt
+    val parts = input.trim().split("\\s+")
 
-    (color, number)
+    (parts(1), parts(0).toInt)
   }
 }
