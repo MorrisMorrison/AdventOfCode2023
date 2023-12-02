@@ -8,23 +8,24 @@ class Day02_02 {
       FileReader().readLinesAsList("src/main/scala/day02/input.txt")
     var result = 0
     for (i <- 0 until lines.length) do
-      val cubesConfiguration: Map[String, Int] = Map("red" -> 0, "green" -> 0, "blue" -> 0)
-      val input = lines(i);
-      val draws = input
-        .slice(input.indexOf(":") + 2, input.length())
+      val minimalRequiredCubeAmountByColor: Map[String, Int] = Map("red" -> 0, "green" -> 0, "blue" -> 0)
+      val line = lines(i);
+      val draws = line 
+        .slice(line.indexOf(":") + 2, line.length())
         .split(";")
       for (draw <- draws) do
         for (step <- draw.split(",")) do
           val input = parseInput(step)
-          if (cubesConfiguration(input._1) < input._2)
-            cubesConfiguration(input._1) = input._2
-      result += cubesConfiguration("red") * cubesConfiguration("green") * cubesConfiguration("blue")
+          if (minimalRequiredCubeAmountByColor(input._1) < input._2)
+            minimalRequiredCubeAmountByColor(input._1) = input._2
+
+      result += minimalRequiredCubeAmountByColor("red") * minimalRequiredCubeAmountByColor("green") * minimalRequiredCubeAmountByColor("blue")
+    
     result.toString()
   }
 
   def parseInput(input: String): (String, Int) = {
     val parts = input.trim().split("\\s+")
-
     (parts(1), parts(0).toInt)
   }
 }
