@@ -3,7 +3,7 @@ package day01
 import scala.io.Source
 import scala.util.boundary, boundary.break
 
-class Day01 {
+class Day01_01 {
   def readFile(fileName: String): List[String] =
     Source.fromFile(fileName).getLines.toList
 
@@ -17,7 +17,7 @@ class Day01 {
   }
 
   def solve(): String = {
-    val lines = readFile("src/main/scala/day01/input.txt")
+    val lines = readFile("src/main/scala/day01/input_01.txt")
     lines
       .map(line => {
         val firstNumber = findFirstNumber(line)
