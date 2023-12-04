@@ -2,8 +2,10 @@ package day03
 
 import utils.FileReader
 import scala.util.control.Breaks._
+import scala.collection.mutable.Map
+import scala.collection.mutable.ListBuffer
 
-class Day03_01 {
+class Day03_02 {
   def parseInputAsMatrix(): Array[Array[Char]] =
     FileReader()
       .readLinesAsArray("src/main/scala/day03/input.txt")
@@ -11,6 +13,8 @@ class Day03_01 {
 
   def solve(): String = {
     var result = 0
+    val asteriskLocationsToNumbers: Map[(Int, Int), ListBuffer[Int]] = Map.empty
+
     val matrix = parseInputAsMatrix()
     for (i <- 0 until matrix.length) do
       var j = 0
@@ -19,13 +23,25 @@ class Day03_01 {
         if (char.isDigit) {
           val numberWithEndIndex: (Int, Int) = findNumber(matrix, i, j)
           val number = numberWithEndIndex._1
-          val isPartNumber = (j until numberWithEndIndex._2).exists(k => hasNearbySymbol(matrix, i, k))
+          breakable {
+            for (k <- j until numberWithEndIndex._2) do
+              val nearbyAsteriskPosition = findNearbyAsterisk(matrix, i, k)
+              if (nearbyAsteriskPosition != (-1, -1)) then
+                if (!asteriskLocationsToNumbers.contains(nearbyAsteriskPosition)) then
+                  asteriskLocationsToNumbers(nearbyAsteriskPosition) = ListBuffer()
+                asteriskLocationsToNumbers(nearbyAsteriskPosition) += number
+                break
+          }
 
-          if (isPartNumber) then result += number
           j = numberWithEndIndex._2
         }
 
         j += 1
+
+    asteriskLocationsToNumbers.foreach((k, v) => {
+      if (v.length == 2) then
+        result += v.product
+    })
 
     result.toString()
   }
@@ -40,12 +56,12 @@ class Day03_01 {
     (asciiCode >= 33 && asciiCode <= 45) || (asciiCode >= 58 && asciiCode <= 64) || asciiCode == 47
   }
 
-  def hasNearbySymbol(
+  def findNearbyAsterisk(
       matrix: Array[Array[Char]],
       row: Int,
       col: Int
-  ): Boolean = {
-    val positionsToCheck = Seq(
+  ): (Int, Int) = {
+    val positionsToCheck = IndexedSeq(
       (row, col - 1),
       (row - 1, col - 1),
       (row + 1, col - 1),
@@ -55,13 +71,18 @@ class Day03_01 {
       (row - 1, col + 1),
       (row + 1, col + 1)
     )
-
-    positionsToCheck.exists { case (r, c) =>
+    val index = positionsToCheck.indexWhere{case (r, c) =>
       r >= 0 && r < matrix.length && c >= 0 && c < matrix(
         0
-      ).length && isValidSymbol(matrix(r)(c))
+      ).length && matrix(r)(c) == '*'
     }
+
+    if (index != -1) then
+      return positionsToCheck(index)
+
+    (-1, -1)
   }
+
   def findNumber(
       matrix: Array[Array[Char]],
       currentRow: Int,
@@ -69,14 +90,18 @@ class Day03_01 {
   ): (Int, Int) = {
     var endIndex = 0
     breakable {
-      for (k <- currentCol until matrix(0).length ) do
-        if ( k+1 >= matrix(currentRow).length || !matrix(currentRow)(k+1).isDigit) then
-          endIndex = k+1
+      for (k <- currentCol until matrix(0).length) do
+        if (
+          k + 1 >= matrix(currentRow).length || !matrix(currentRow)(
+            k + 1
+          ).isDigit
+        ) then
+          endIndex = k + 1
           break()
     }
 
     val number = matrix(currentRow).slice(currentCol, endIndex).mkString.toInt
     (number, endIndex)
-  
-}
+
+  }
 }
