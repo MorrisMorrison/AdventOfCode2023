@@ -19,7 +19,9 @@ class Day03_01 {
         if (char.isDigit) {
           val numberWithEndIndex: (Int, Int) = findNumber(matrix, i, j)
           val number = numberWithEndIndex._1
-          val isPartNumber = (j until numberWithEndIndex._2).exists(k => hasNearbySymbol(matrix, i, k))
+          val isPartNumber = (j until numberWithEndIndex._2).exists(k =>
+            hasNearbySymbol(matrix, i, k)
+          )
 
           if (isPartNumber) then result += number
           j = numberWithEndIndex._2
@@ -69,14 +71,18 @@ class Day03_01 {
   ): (Int, Int) = {
     var endIndex = 0
     breakable {
-      for (k <- currentCol until matrix(0).length ) do
-        if ( k+1 >= matrix(currentRow).length || !matrix(currentRow)(k+1).isDigit) then
-          endIndex = k+1
+      for (k <- currentCol until matrix(0).length) do
+        if (
+          k + 1 >= matrix(currentRow).length || !matrix(currentRow)(
+            k + 1
+          ).isDigit
+        ) then
+          endIndex = k + 1
           break()
     }
 
     val number = matrix(currentRow).slice(currentCol, endIndex).mkString.toInt
     (number, endIndex)
-  
-}
+
+  }
 }

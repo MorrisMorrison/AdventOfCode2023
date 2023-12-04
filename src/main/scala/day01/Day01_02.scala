@@ -33,7 +33,9 @@ class Day01_02 {
 
         val remainingString = text.substring(i)
         val digit =
-          digitStrings.indexWhere(number => remainingString.startsWith(number)) + 1
+          digitStrings.indexWhere(number =>
+            remainingString.startsWith(number)
+          ) + 1
         if (digit != 0)
           lastDigit = digit
         if (firstDigit == 0) firstDigit = digit

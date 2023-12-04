@@ -8,9 +8,10 @@ class Day02_02 {
       FileReader().readLinesAsList("src/main/scala/day02/input.txt")
     var result = 0
     for (i <- 0 until lines.length) do
-      val minimalRequiredCubeAmountByColor: Map[String, Int] = Map("red" -> 0, "green" -> 0, "blue" -> 0)
+      val minimalRequiredCubeAmountByColor: Map[String, Int] =
+        Map("red" -> 0, "green" -> 0, "blue" -> 0)
       val line = lines(i);
-      val draws = line 
+      val draws = line
         .slice(line.indexOf(":") + 2, line.length())
         .split(";")
       for (draw <- draws) do
@@ -19,8 +20,12 @@ class Day02_02 {
           if (minimalRequiredCubeAmountByColor(input._1) < input._2)
             minimalRequiredCubeAmountByColor(input._1) = input._2
 
-      result += minimalRequiredCubeAmountByColor("red") * minimalRequiredCubeAmountByColor("green") * minimalRequiredCubeAmountByColor("blue")
-    
+      result += minimalRequiredCubeAmountByColor(
+        "red"
+      ) * minimalRequiredCubeAmountByColor(
+        "green"
+      ) * minimalRequiredCubeAmountByColor("blue")
+
     result.toString()
   }
 

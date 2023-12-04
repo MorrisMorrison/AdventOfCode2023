@@ -27,8 +27,11 @@ class Day03_02 {
             for (k <- j until numberWithEndIndex._2) do
               val nearbyAsteriskPosition = findNearbyAsterisk(matrix, i, k)
               if (nearbyAsteriskPosition != (-1, -1)) then
-                if (!asteriskLocationsToNumbers.contains(nearbyAsteriskPosition)) then
-                  asteriskLocationsToNumbers(nearbyAsteriskPosition) = ListBuffer()
+                if (
+                  !asteriskLocationsToNumbers.contains(nearbyAsteriskPosition)
+                ) then
+                  asteriskLocationsToNumbers(nearbyAsteriskPosition) =
+                    ListBuffer()
                 asteriskLocationsToNumbers(nearbyAsteriskPosition) += number
                 break
           }
@@ -39,8 +42,7 @@ class Day03_02 {
         j += 1
 
     asteriskLocationsToNumbers.foreach((k, v) => {
-      if (v.length == 2) then
-        result += v.product
+      if (v.length == 2) then result += v.product
     })
 
     result.toString()
@@ -71,14 +73,13 @@ class Day03_02 {
       (row - 1, col + 1),
       (row + 1, col + 1)
     )
-    val index = positionsToCheck.indexWhere{case (r, c) =>
+    val index = positionsToCheck.indexWhere { case (r, c) =>
       r >= 0 && r < matrix.length && c >= 0 && c < matrix(
         0
       ).length && matrix(r)(c) == '*'
     }
 
-    if (index != -1) then
-      return positionsToCheck(index)
+    if (index != -1) then return positionsToCheck(index)
 
     (-1, -1)
   }
