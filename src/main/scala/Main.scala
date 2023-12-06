@@ -6,6 +6,8 @@ import day03.Day03_01
 import day03.Day03_02
 import day04.Day04_01
 import day04.Day04_02
+import day05.Day05_01
+import day06.Day06_01
 
 @main def run: Unit = {
   println("Day01_01: " + Day01_01().solve());
@@ -16,4 +18,6 @@ import day04.Day04_02
   println("Day03_02: " + Day03_02().solve());
   println("Day04_01: " + Day04_01().solve());
   println("Day04_02: " + Day04_02().solve());
+  println("Day05_01: " + Day05_01().solve());
+  println("Day06_01: " + Day06_01().solve());
 }
