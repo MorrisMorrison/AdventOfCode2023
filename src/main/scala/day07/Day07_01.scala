@@ -1,10 +1,11 @@
 package day07
 
 import utils.FileReader
+import scala.util.boundary, boundary.break
 
 class Day07_01 {
 
-  case class Hand(handType: HandType, cards: List[Char])
+  case class Hand(handType: HandType, cards: List[Char], bid: Int)
   // ordinal = strength
   enum HandType:
     case HIGH_CARD
@@ -17,22 +18,38 @@ class Day07_01 {
 
   // index = strength
   val cards = List(
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "T",
-    "J",
-    "Q",
-    "K",
-    "A"
+    '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'
   )
 
-  def solve() = {}
+  def solve() = {
+    val lines =
+      new FileReader().readLinesAsList("src/main/scala/day07/input.txt")
+    val hands = lines.map(l => {
+      val input = l.split("\\s+");
+      Hand(getHandType(input(0)), input(0).toCharArray.toList, input(1).toInt)
+    })
+
+    val sortedHands = hands.sortWith(isWeakerHand)
+    val result = sortedHands.zipWithIndex
+    .map { case (hand, index) => hand.bid * (index + 1)}
+    .sum
+    result.toString
+  }
+
+  def isWeakerHand(hand1: Hand, hand2: Hand): Boolean = {
+    if (hand1.handType != hand2.handType) then
+      return hand1.handType.ordinal < hand2.handType.ordinal
+
+    boundary {
+      (0 until hand1.cards.length).foreach(i => {
+        if (hand1.cards(i) != hand2.cards(i))
+
+          break(cards.indexOf(hand1.cards(i)) < cards.indexOf(hand2.cards(i)))
+      })
+
+      false
+    }
+  }
 
   def getHandType(hand: String): HandType = {
     hand match
@@ -42,40 +59,43 @@ class Day07_01 {
       case _ if isThreeOfAKind(hand) => HandType.THREE_OF_A_KIND
       case _ if isTwoPair(hand)      => HandType.TWO_PAIR
       case _ if isOnePair(hand)      => HandType.ONE_PAIR
-      case _ if isHighCard(hand)     => HandType.HIGH_CARD
+      case default                   => HandType.HIGH_CARD
   }
 
   def isFiveOfAKind(hand: String): Boolean = hand.forall(_ == hand.head)
 
   def isFourOfAKind(hand: String): Boolean =
-    hand.distinct.length == 2 && hand.distinct.tail.forall(_ == hand.head)
+    hand.distinct.exists(ch => hand.count(_ == ch) == 4)
 
   def isFullHouse(hand: String): Boolean = {
     val groupedChars = hand.groupBy(identity).values.toList
-    groupedChars.length == 2 && groupedChars.exists(group =>
-      group.length == 2
-    ) && groupedChars.exists(group => group.length == 3)
+    groupedChars.exists(group => group.length == 2) && groupedChars.exists(
+      group => group.length == 3
+    )
   }
 
   def isThreeOfAKind(hand: String): Boolean =
-    hand.distinct.length == 3 && hand.distinct.forall(ch =>
-      hand.count(_ == ch) == 3
-    )
+    hand.distinct.exists(ch => hand.count(_ == ch) == 3)
 
   def isTwoPair(hand: String): Boolean = {
     val groupedChars = hand.groupBy(identity).values.toList
-    groupedChars.length == 2 && groupedChars.forall(group => group.length == 2)
+    groupedChars.count(group => group.length == 2) == 2
   }
 
   def isOnePair(hand: String): Boolean = {
     val groupedChars = hand.groupBy(identity).values.toList
-    groupedChars.length == 2 && groupedChars.exists(group => group.length == 2)
+    groupedChars.exists(group => group.length == 2)
   }
 
   def isHighCard(hand: String): Boolean = hand.distinct.length == 5
 
   def findHighestCard(hand: String): Char = {
-    return 'A'
+    var highestCardIndex = -1
+    for (c <- hand)
+      if (cards.indexOf(c) > highestCardIndex)
+        highestCardIndex = cards.indexOf(c)
+
+    cards(highestCardIndex)
   }
 
   def parseInput(line: String) = {
