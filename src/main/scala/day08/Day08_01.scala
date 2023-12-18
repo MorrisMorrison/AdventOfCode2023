@@ -15,9 +15,6 @@ class Day08_01 {
     var currentInstruction: String = "AAA"
     var targetInstruction: String = "ZZZ" 
 
-    val stopwatch = new Stopwatch()
-    stopwatch.start()
-
     var steps: Long  = 0
     while (currentInstruction != targetInstruction) {
       boundary {
@@ -37,9 +34,6 @@ class Day08_01 {
         }
       }
     }
-
-    stopwatch.stop()
-    println(stopwatch.elapsedTime())
 
     steps.toString()
   }
